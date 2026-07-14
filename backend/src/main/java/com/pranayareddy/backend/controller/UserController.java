@@ -5,6 +5,9 @@ import com.pranayareddy.backend.dto.response.ApiResponse;
 import com.pranayareddy.backend.dto.response.UserResponse;
 import com.pranayareddy.backend.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,23 +46,28 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponse>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        return ResponseEntity.ok(
+                userService.getAllUsers(page, size, sortBy, direction));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(
+    public ResponseEntity<UserResponse> createUser(
             @Valid @RequestBody CreateUserRequest request) {
 
-        UserResponse user = userService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.createUser(request));
+    }
 
-        ApiResponse<UserResponse> response = ApiResponse.<UserResponse>builder()
-                .success(true)
-                .message("User created successfully")
-                .data(user)
-                .timestamp(Instant.now())
-                .build();
+    @GetMapping("/search")
+    public ResponseEntity<UserResponse> getUserByEmail(
+            @RequestParam String email) {
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 }

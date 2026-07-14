@@ -3,12 +3,15 @@ package com.pranayareddy.backend.service.impl;
 import com.pranayareddy.backend.dto.request.CreateUserRequest;
 import com.pranayareddy.backend.dto.response.UserResponse;
 import com.pranayareddy.backend.entity.User;
-import com.pranayareddy.backend.exception.BadRequestException;
 import com.pranayareddy.backend.exception.ResourceNotFoundException;
 import com.pranayareddy.backend.exception.UserNotFoundException;
 import com.pranayareddy.backend.repository.UserRepository;
 import com.pranayareddy.backend.service.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -39,17 +42,25 @@ public class UserServiceImpl implements UserService {
         );
     }
     @Override
-    public List<UserResponse> getAllUsers() {
+    public Page<UserResponse> getAllUsers(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
 
-        return userRepository.findAll()
-                .stream()
-                .map(user -> UserResponse.builder()
-                        .id(user.getId())
-                        .firstName(user.getFirstName())
-                        .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .build())
-                .toList();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return userRepository.findAll(pageable)
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail()
+                ));
     }
     @Override
     public UserResponse getUserById(Long id) {
@@ -94,5 +105,20 @@ public class UserServiceImpl implements UserService {
                 .lastName(updatedUser.getLastName())
                 .email(updatedUser.getEmail())
                 .build();
+    }
+
+    @Override
+    public UserResponse getUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User with email " + email + " not found"));
+
+        return new UserResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail()
+        );
     }
 }
