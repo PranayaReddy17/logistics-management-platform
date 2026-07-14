@@ -14,6 +14,10 @@ public class User {
 
     private String lastName;
 
+    private String password;
+
+    private String role;
+
     @Column(unique = true)
     private String email;
 
