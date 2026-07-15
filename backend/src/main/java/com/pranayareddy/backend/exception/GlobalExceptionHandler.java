@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponse response = ErrorResponse.builder()
                 .success(false)
-                .message("Internal Server Error")
+                .message(ex.getMessage())
                 .timestamp(Instant.now())
                 .build();
 
@@ -84,5 +84,19 @@ public class GlobalExceptionHandler {
                         errors.put(error.getField(), error.getDefaultMessage()));
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleEmailAlreadyExists(
+            EmailAlreadyExistsException ex) {
+
+        ApiErrorResponse error = new ApiErrorResponse();
+        error.setSuccess(false);
+        error.setMessage(ex.getMessage());
+        error.setStatus(HttpStatus.CONFLICT.value());
+        error.setError("Conflict");
+        error.setTimestamp(Instant.now());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }
