@@ -4,6 +4,7 @@ import com.pranayareddy.backend.dto.request.CreateUserRequest;
 import com.pranayareddy.backend.dto.response.ApiResponse;
 import com.pranayareddy.backend.dto.response.UserResponse;
 import com.pranayareddy.backend.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserService userService;
