@@ -1,50 +1,88 @@
 # Logistics Management Platform
 
-An enterprise-grade Logistics Management Platform built using modern backend technologies.
+An enterprise-style Logistics Management Platform built using **Java, Spring Boot, Spring Security, PostgreSQL, JWT, and REST APIs**.
 
-## Vision
+This project demonstrates practical backend engineering concepts used in shipping, logistics, and enterprise software systems, including authentication, shipment lifecycle management, tracking, search, pagination, sorting, PDF shipping labels, and email notification infrastructure.
 
-This project demonstrates how to build scalable logistics software using a microservices-inspired architecture.
+---
 
-## Planned Features
+## 🚀 Project Overview
 
-- User Authentication (JWT)
-- Shipment Management
-- Order Management
-- Package Tracking
-- Warehouse Management
-- Carrier Integration (Mock APIs)
-- Email Notifications
-- Admin Dashboard
-- REST APIs
-- Role-Based Access Control
-- Reporting & Analytics
+The Logistics Management Platform provides a secure REST API backend for managing shipments throughout their lifecycle.
 
-## Tech Stack
+The application follows a clean layered architecture using:
 
-### Backend
-- Java 21
-- Spring Boot
-- Spring Security
-- Spring Data JPA
+- Controllers
+- Services
+- Repositories
+- DTOs
+- Entities
+- Security
+- Exception Handling
+- Database Persistence
 
-### Frontend
-- React
-- TypeScript
-- Material UI
+JWT-based authentication protects secured APIs while allowing authenticated users to manage shipment information.
 
-### Database
-- PostgreSQL
+---
 
-### DevOps
-- Docker
-- GitHub Actions
+## ✨ Features
 
-### Cloud
-- AWS
+### 🔐 Authentication & Security
 
-## Project Status
+- User registration
+- User login
+- JWT authentication
+- Password encryption using BCrypt
+- Spring Security integration
+- Role-based user structure
+- Protected REST APIs
+- Swagger/OpenAPI JWT authorization
 
-🚧 Under Active Development
+### 👤 User Management
 
-This repository is being built as part of my journey toward modern backend engineering and cloud-native application development.
+- Create users
+- Retrieve users
+- Retrieve user by ID
+- Update users
+- Delete users
+- Search users
+- Email uniqueness validation
+- Secure password storage
+
+### 📦 Shipment Management
+
+- Create shipments
+- Retrieve shipment by ID
+- Retrieve shipment by tracking number
+- Update shipment
+- Cancel shipment
+- Shipment status management
+- Carrier management
+- Sender and receiver information
+- Origin and destination management
+- Shipment weight tracking
+- Automatic creation/update timestamps
+
+### 🔎 Shipment Search & Filtering
+
+Shipments can be searched and filtered using:
+
+- Shipment status
+- Carrier
+- Origin
+- Destination
+
+### 📄 Pagination & Sorting
+
+Shipment listing supports:
+
+- Pagination
+- Configurable page size
+- Sorting
+- Ascending order
+- Descending order
+
+Example:
+
+```text
+GET /api/v1/shipments?page=0&size=10&sortBy=createdAt&direction=desc
